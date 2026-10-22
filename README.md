@@ -105,3 +105,11 @@ The Codespaces configuration installs Node 24.22.1 and both projects' dependenci
 After setup finishes, run `npm run wix:prepare` from the repository root, then
 follow [the Wix migration instructions](wix-deploy/README.md).
 The `wix-deploy` folder keeps Wix deployment dependencies separate from the Next.js source.
+
+## Automatic production deployment
+
+The GitHub Actions workflow deploys commits merged or pushed to `main` to
+burnsgd.com after lint and build checks pass. Add the one-time `WIX_API_KEY`
+Actions secret as described in [the deployment setup](wix-deploy/CI-CD.md).
+Future updates use the normal Wix build/release flow; the completed migration
+does not need to be finalized again.
