@@ -98,3 +98,10 @@ Use the host's static-site option. The exported site does not need a running Nod
 This configuration assumes the site is served from the root of a domain, such as `https://your-domain.com/`. For a GitHub Pages **project** site under `/repository-name/`, set Next.js `basePath` to `/repository-name`, update the favicon path in `app/layout.tsx` to include that prefix, and rebuild. A GitHub Pages user site or custom domain at the root uses the default configuration. An empty `public/.nojekyll` file is included so `_next` assets are preserved on Pages.
 
 Pointing your existing domain at a new host or replacing files on your current hosting account is a separate step. This package does not change your current website or DNS.
+
+## Deploy to Wix from GitHub Codespaces
+
+The Codespaces configuration installs Node 24.22.1 and both projects' dependencies.
+After setup finishes, run `npm run wix:prepare` from the repository root, then
+follow [the Wix migration instructions](wix-deploy/README.md).
+The `wix-deploy` folder keeps Wix deployment dependencies separate from the Next.js source.

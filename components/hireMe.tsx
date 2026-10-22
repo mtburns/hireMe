@@ -498,7 +498,7 @@ const nameMissing = submitted && !name.trim();
               <h4 className="mt-3">Bachelor of Fine Arts in Graphic Design</h4>
               <p className="mt-3 ml-5">The Art Institute of Atlanta · 2013</p>
             </article>
-            <a href="travisBurnsResume.docx" className={ui.primaryButton + " mt-6"} target="_blank" rel="noopener noreferrer">
+            <a href="https://c0e2f0bd-2d10-4300-af65-881a636d4510.usrfiles.com/ugd/392363_f981ceee67a445e4bf3fa1fde31f6f13.docx" className={ui.primaryButton + " mt-6"} target="_blank" rel="noopener noreferrer">
               Download résumé <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 448 512"

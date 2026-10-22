@@ -5,7 +5,7 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "out/**", "node_modules/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", "out/**", "node_modules/**", "next-env.d.ts", "wix-deploy/**"]),
   {
     files: ["**/*.{ts,tsx}"],
     rules: { "@typescript-eslint/no-explicit-any": "error" },
