@@ -1,5 +1,9 @@
 # Finish the Wix migration from Codespaces
 
+The migration is complete. For future updates, use
+[automatic deployment](CI-CD.md). The steps below document the original
+one-time migration and do not need to be repeated.
+
 The Next.js project in the repository root remains the portfolio source.
 This folder is a separate Wix deployment project. Its generated `public/`
 folder receives the complete static export from the current source.

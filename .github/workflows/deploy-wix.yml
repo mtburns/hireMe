@@ -1,0 +1,80 @@
+name: Deploy portfolio to Wix
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Finish an active release before starting another deployment.
+concurrency:
+  group: wix-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://www.burnsgd.com/
+    env:
+      CI: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+      ASTRO_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check deployment credential
+        env:
+          WIX_API_KEY: ${{ secrets.WIX_API_KEY }}
+        run: |
+          if [ -z "$WIX_API_KEY" ]; then
+            echo "::error::Add the WIX_API_KEY Actions secret before deploying. See wix-deploy/CI-CD.md."
+            exit 1
+          fi
+
+      - name: Check out the merged source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24.22.1"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            wix-deploy/package-lock.json
+
+      - name: Install portfolio dependencies
+        run: npm ci --include=dev --include=optional
+
+      - name: Check frontend code
+        run: npm run lint
+
+      - name: Build and prepare the current portfolio
+        run: npm run wix:prepare
+
+      - name: Install Wix deployment dependencies
+        run: npm ci --prefix wix-deploy --include=dev --include=optional
+
+      - name: Authenticate with Wix
+        working-directory: wix-deploy
+        env:
+          WIX_API_KEY: ${{ secrets.WIX_API_KEY }}
+        run: npx wix login --api-key "$WIX_API_KEY"
+
+      - name: Build the Wix hosting project
+        working-directory: wix-deploy
+        run: npx wix build
+
+      - name: Publish to burnsgd.com
+        working-directory: wix-deploy
+        run: npx wix release --version-type minor --comment "GitHub ${GITHUB_SHA}"
+
+      - name: Record deployment
+        run: |
+          echo "Deployed commit ${GITHUB_SHA} to https://www.burnsgd.com/" >> "$GITHUB_STEP_SUMMARY"

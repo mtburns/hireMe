@@ -21,4 +21,4 @@ await cp(output, destination, {
 });
 
 console.log(`Prepared Wix frontend in ${fileURLToPath(destination)}`);
-console.log("Next: cd wix-deploy, then npx wix login and npx wix finalize-migration.");
+console.log("Deploy by merging into main; see wix-deploy/CI-CD.md for the one-time setup.");
