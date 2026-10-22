@@ -31,7 +31,8 @@ environment reviewers disabled to keep deployments fully automatic.
 The Ubuntu job uses Node 24.22.1 and both projects' lockfiles. It runs ESLint
 and `npm run wix:prepare`, which builds the current Next.js source, checks its
 TypeScript, and copies the export into `wix-deploy/public/`. It authenticates
-with `wix login --api-key`, runs `wix build`, then publishes using
+with `wix login --api-key`, pulls the build environment with `wix env pull`,
+runs `wix build`, then publishes using
 `wix release --version-type minor`. The release comment records the commit SHA.
 
 A failed step stops the job before subsequent steps run. Production runs share
@@ -53,6 +54,9 @@ commands; the completed migration does not need to be finalized again.
 ## Troubleshooting
 
 - **Missing key:** Add the `WIX_API_KEY` Actions secret, then rerun the workflow.
+- **Missing `WIX_CLIENT_ID`:** Confirm **Pull the Wix build environment** passed
+  before the Wix build. A fresh runner needs the generated `.env.local`; logging
+  in alone does not create it. Keep this file out of Git and build artifacts.
 - **Wix permission error:** Confirm the key belongs to the site's owning account
   and can access the private app and deployment operations. Adjust that
   dedicated key's permissions in Wix.

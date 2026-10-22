@@ -67,6 +67,10 @@ jobs:
           WIX_API_KEY: ${{ secrets.WIX_API_KEY }}
         run: npx wix login --api-key "$WIX_API_KEY"
 
+      - name: Pull the Wix build environment
+        working-directory: wix-deploy
+        run: npx wix env pull
+
       - name: Build the Wix hosting project
         working-directory: wix-deploy
         run: npx wix build
