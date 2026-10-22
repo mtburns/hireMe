@@ -1,60 +1,48 @@
-# Finish the Wix migration from Codespaces
+# Manual deployment to Wix
 
-The migration is complete. For future updates, use
-[automatic deployment](CI-CD.md). The steps below document the original
-one-time migration and do not need to be repeated.
+Normal updates deploy automatically when changes reach `main`. See
+[GitHub Actions setup and troubleshooting](CI-CD.md).
 
-The Next.js project in the repository root remains the portfolio source.
-This folder is a separate Wix deployment project. Its generated `public/`
-folder receives the complete static export from the current source.
+For a manual deployment, use Linux or GitHub Codespaces with Node.js 24.22.1.
+The repository root contains the Next.js source; this folder contains the Wix
+hosting project and its finalized connection in `wix.config.json`.
 
-## Create the Codespace
+## Install and prepare
 
-Open this branch on GitHub, choose **Code → Codespaces → Create codespace**,
-and wait for the post-create setup to finish. Setup selects Node 24.22.1 and
-installs the two projects' locked dependencies. It does not publish anything.
-
-## Prepare the latest frontend
-
-In the repository-root terminal:
+Run these commands from the repository root, stopping if any step fails:
 
 ```sh
+npm ci
+npm ci --prefix wix-deploy --include=dev --include=optional
+npm run lint
 npm run wix:prepare
 ```
 
-This builds the Next.js portfolio and copies `out/` into this folder's
-generated `public/`. It preserves the Wix connection and any local
-environment files. The résumé link uses its existing Wix Media Manager URL.
+The prepare command builds the current frontend and copies `out/` into this
+folder's generated `public/` directory.
 
-## Sign in and complete the migration
+## Sign in
 
 ```sh
 cd wix-deploy
 npx wix login
 ```
 
-Open the URL printed by Wix and approve the device code. Then run:
+Approve the device code using the URL printed by Wix. After login completes,
+pull the build environment:
 
 ```sh
-npx wix finalize-migration
+npx wix env pull
 ```
 
-The migration command handles its own build and release. Do not run
-`wix build` or `wix release` separately for this migration.
+## Build and publish
 
-The checked-in connection points at the existing migration preview. Let the
-CLI resolve and update the parent connection; do not replace these IDs by
-hand or create another Wix site. No apps or sample data need to be installed.
+Run the release only after the build succeeds:
 
-After a successful completion, check https://www.burnsgd.com/, the theme
-toggle, the interactive examples, the portrait, and the résumé download.
-Keep the CLI's updated `wix.config.json` for later work.
+```sh
+npx wix build && npx wix release --version-type minor
+```
 
-## Local files and credentials
-
-Dependencies, compiled frontend files, Wix build output and `.env*` files
-are ignored by Git. Sign in inside Codespaces; copying credentials or
-Windows `node_modules` from another machine is unnecessary.
-
-The Windows-only native-library and drive-path patches are not used in this
-Linux environment.
+Check [burnsgd.com](https://www.burnsgd.com/) after the release completes.
+Dependencies, generated frontend files, build output, and `.env*` files are
+ignored by Git. Keep the existing site/app connection in `wix.config.json`.
