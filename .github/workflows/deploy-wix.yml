@@ -18,9 +18,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    environment:
-      name: production
-      url: https://www.burnsgd.com/
     env:
       CI: "true"
       NEXT_TELEMETRY_DISABLED: "1"

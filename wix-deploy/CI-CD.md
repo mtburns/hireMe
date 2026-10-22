@@ -22,9 +22,21 @@ from `main` in GitHub's Actions tab. Opening or updating a PR does not deploy it
 
 No account ID, interactive browser login, Codespace session, or committed
 `.env.local` is needed. The CLI reads `wix.config.json` and uses the API key to
-authenticate and pull its build environment. The optional GitHub `production`
-environment can hold the secret instead of the repository. Leave required
-environment reviewers disabled to keep deployments fully automatic.
+authenticate and pull its build environment. Store `WIX_API_KEY` as a
+repository Actions secret, not an environment secret. The workflow does not
+reference a GitHub deployment environment, so it can run in a private repository
+on GitHub Free.
+
+## Switching the repository to private
+
+Merge this workflow change and confirm the deployment succeeds before changing
+visibility. Then open **Settings → General → Danger Zone → Change repository
+visibility** and select **Private**. The Wix-hosted site remains public.
+
+The deployment job still runs only from `main` and retains its lint/build checks
+and production concurrency group. Private-repository runs use the GitHub plan's
+included Actions minutes. See [GitHub's plans](https://docs.github.com/en/get-started/learning-about-github/githubs-plans)
+and [deployment environment availability](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
 
 ## Each deployment
 
