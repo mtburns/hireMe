@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* The palette stays together; every component uses Tailwind utilities. */
+@theme {
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: monospace;
+  --color-paper: light-dark(#f5f1e7, #24291f);
+  --color-ink: light-dark(#293124, #f1eee2);
+  --color-muted: light-dark(#626752, #bcc2ac);
+  --color-rule: light-dark(#cccdbf, #56604c);
+  --color-control: light-dark(#787d6b, #8f9c80);
+  --color-green: light-dark(#294c38, #c3d9b5);
+  --color-orange: light-dark(#a64d30, #efa583);
+  --color-soft: light-dark(#e9e8db, #30392a);
+  --color-field: light-dark(#fffdf6, #2a3223);
+  --color-error: light-dark(#9d3525, #ffb29d);
+  --color-focus: light-dark(#97401f, #ffbd92);
+  --animate-find-place: find-place 0.3s ease both;
+
+  @keyframes find-place {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+@layer base {
+  html {
+    @apply scroll-auto scroll-py-6 scheme-light dark:scheme-dark motion-safe:scroll-smooth;
+    @apply print:scheme-light print:[--color-paper:#fff] print:[--color-ink:#111] print:[--color-muted:#333] print:[--color-rule:#888] print:[--color-green:#111] print:[--color-orange:#111];
+  }
+  body {
+    @apply m-0 bg-paper font-sans text-base leading-[1.75] text-ink wrap-break-word selection:bg-green selection:text-paper;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+  a {
+    @apply no-underline hover:underline hover:underline-offset-[5px];
+  }
+  button,
+  a,
+  summary,
+  input {
+    @apply [-webkit-tap-highlight-color:transparent];
+  }
+  :focus-visible {
+    @apply outline-3 outline-solid outline-focus outline-offset-[5px] forced-colors:outline-[Highlight];
+  }
+  [id] {
+    @apply scroll-mt-6;
+  }
+  h1,
+  h2 {
+    @apply font-serif font-normal;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply text-ink;
+  }
+  h1 {
+    @apply mt-[57px] mb-9 text-[clamp(70px,8.1vw,106px)] leading-[1.035] tracking-[-5.2px];
+    @apply min-[1500px]:mt-[62px] min-[1500px]:text-[112px];
+    @apply max-[760px]:mt-10 max-[760px]:mb-7 max-[760px]:text-[clamp(58px,10.5vw,78px)] max-[760px]:tracking-[-3px];
+    @apply max-[540px]:text-[clamp(44px,11vw,62px)] max-[540px]:tracking-[-2px] print:mt-7 print:text-[48px];
+  }
+  h2 {
+    @apply text-[42px] leading-[1.15] tracking-[-1.5px] max-[1100px]:text-[38px] max-[760px]:text-[37px];
+  }
+  summary {
+    @apply cursor-pointer list-none [&::-webkit-details-marker]:hidden;
+  }
+}
