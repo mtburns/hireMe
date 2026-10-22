@@ -4,3 +4,8 @@ out/
 package-lock.json
 next-env.d.ts
 *.tsbuildinfo
+wix-deploy/public/
+wix-deploy/dist/
+wix-deploy/.astro/
+wix-deploy/.wix/
+wix-deploy/.wrangler/
